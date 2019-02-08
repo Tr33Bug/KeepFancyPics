@@ -42,8 +42,30 @@ public class OrdnerInhaltAusgeben {
         // list files from source
         sourceFile = whatsInside(source);
         sourceFile = onlyJPG(sourceFile);
-        
+  
+        bilderEntscheiden(sourceFile, sourcePath);
 
+    }
+
+    /**
+     * 
+     * @param sourceFile
+     * @param imageSourcePath
+     */
+    private static void bilderEntscheiden(String[] sourceFile, String imageSourcePath) {
+        Object[] obj = { "keep", "trash" };
+        for (int i = 0; i < sourceFile.length; i++) {
+            ImageIcon icon = new ImageIcon(imageSourcePath + sourceFile[i]);
+            Object antwort = JOptionPane.showInputDialog(null, "toKeep or trasch?", "decide :D",
+                    JOptionPane.INFORMATION_MESSAGE, icon, obj, "Hallo");
+            if (antwort == "keep") {
+                System.out.println(sourceFile[i] + " das wird: " + obj[0]);
+            } else if (antwort == "trash") {
+                System.out.println(sourceFile[i] + " das wird: " + obj[1]);
+            } else {
+                System.out.println("break");
+            }
+        }
 
     }
 
@@ -73,7 +95,7 @@ public class OrdnerInhaltAusgeben {
         String dateinamen[] = file.list();
 
         for (String name : dateinamen) {
-            System.out.println(name + "\n");
+            System.out.println(name);
         }
 
         return dateinamen;
@@ -86,21 +108,24 @@ public class OrdnerInhaltAusgeben {
      */
     private static String[] onlyJPG(String[] listOfIndex) {
         int newPlace = 0;
-        String[] sortList = new String[listOfIndex.length - 1];
+        String[] sortList = new String[listOfIndex.length];
         for (int i = 0; i < listOfIndex.length; i++) {
 
-            if (listOfIndex[i].contains(".jpg")) {
+            if (listOfIndex[i].contains(".jpg") == true) {
                 sortList[newPlace] = listOfIndex[i];
-                System.out.println("Jippie!!! : ");
-                System.out.println();
-                System.out.println(listOfIndex[i]);
-            } else {
-                System.out.println("Das sollte jetzt keine JPG datei sein... : " + listOfIndex[i]);
-            }
+                newPlace++;
+            } 
+            
+        }
+        newPlace--; //um das Letzte ++ rückgängig zu machen... 
 
+        String[] listJustJPG = new String[newPlace + 1];
+
+        for (int i = 0; i <= newPlace; i++) {
+            listJustJPG[i] = sortList[i];
         }
 
-        return listOfIndex;
+        return listJustJPG;
     }
 
 }
